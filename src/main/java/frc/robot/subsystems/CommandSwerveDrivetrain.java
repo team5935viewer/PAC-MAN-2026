@@ -293,6 +293,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 );
                 m_hasAppliedOperatorPerspective = true;
             });
+            /* Allegedy in 2024 cord space was standized to only use blue alliance pose.
 
             Optional<Alliance> ally = DriverStation.getAlliance();
             if (ally.isPresent()) {
@@ -305,10 +306,12 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                     perspective_pose2d = () -> LimelightHelpers.getBotPose2d_wpiBlue(limelight);
 
                 }
-            }    
+            } 
+            */   
         }
 
-        addVisionMeasurement(perspective_pose2d.get(), LimelightHelpers.getLatestResults(limelight).timestamp_LIMELIGHT_publish);
+        //addVisionMeasurement(perspective_pose2d.get(), LimelightHelpers.getLatestResults(limelight).timestamp_LIMELIGHT_publish);
+        addVisionMeasurement(LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelight).pose, LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelight).timestampSeconds);
     }
 
     private void startSimThread() {

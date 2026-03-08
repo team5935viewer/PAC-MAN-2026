@@ -9,13 +9,18 @@ import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -53,19 +58,32 @@ public class RobotContainer {
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
+    private PathPlannerPath LauncherEnvelope;
+
+
     /* Declare human interface devices. */
     private final CommandXboxController joystick = new CommandXboxController(0);
     private final GenericHID operatorPanel = new GenericHID(1);
 
 
     public RobotContainer() {
+        // Register any commands you might want to use in paths.
+        NamedCommands.registerCommand("Indexer into launcher", new IndexerCMD(indexer, 0.5, 0.5));
+        NamedCommands.registerCommand("Intake into hopper", new IntakeCMD(intake, false));
+        NamedCommands.registerCommand("Shoot", new LauncherCMD(launcher, 0.7));
+        NamedCommands.registerCommand("Bring intake up", new IntakeArmCMD(intake, true));
+        NamedCommands.registerCommand("Bring intake down", new IntakeArmCMD(intake, false));
+        NamedCommands.registerCommand("Unload", new ParallelCommandGroup(new IndexerCMD(indexer, -0.5, -0.5), new IntakeCMD(intake, true)));
+        
+        // Init autochooser and send data to SmartDashboard.
         autoChooser = AutoBuilder.buildAutoChooser();
-
         SmartDashboard.putData("Auto Chooser", autoChooser);
+
         configureBindings();
     }
 
     private void configureBindings() {
+
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
@@ -119,13 +137,24 @@ public class RobotContainer {
         // Unload.
         new JoystickButton(operatorPanel, 0).whileTrue(new ParallelCommandGroup(new IndexerCMD(indexer, -0.5, -0.5), new IntakeCMD(intake, true)));
 
-        NamedCommands.registerCommand("Indexer into launcher", new IndexerCMD(indexer, 0.5, 0.5));
-        NamedCommands.registerCommand("Intake into hopper", new IntakeCMD(intake, false));
-        NamedCommands.registerCommand("Shoot", new LauncherCMD(launcher, 0.7));
-        NamedCommands.registerCommand("Bring intake up", new IntakeArmCMD(intake, true));
-        NamedCommands.registerCommand("Bring intake down", new IntakeArmCMD(intake, false));
-        NamedCommands.registerCommand("Unload", new ParallelCommandGroup(new IndexerCMD(indexer, -0.5, -0.5), new IntakeCMD(intake, true)));
-        
+        // PLAN B - Annihilate the youth.
+        try{
+            // Load the path to launcher envelope using its name in the GUI.
+            LauncherEnvelope = PathPlannerPath.fromPathFile("LauncherEnvelope");
+
+        } catch (Exception e) {
+            DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
+        }
+
+        // Create the constraints to use while pathfinding. The constraints defined in the path will only be used for the path.
+        PathConstraints constraints = new PathConstraints(
+            3.0, 4.0,
+            Units.degreesToRadians(540), Units.degreesToRadians(720));
+
+        // Since AutoBuilder is configured, we can use it to build pathfinding commands
+        new JoystickButton(operatorPanel, 0).whileTrue(AutoBuilder.pathfindThenFollowPath(
+            LauncherEnvelope,
+            constraints));
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }
