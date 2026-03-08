@@ -8,6 +8,7 @@ import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -118,8 +119,12 @@ public class RobotContainer {
         // Unload.
         new JoystickButton(operatorPanel, 0).whileTrue(new ParallelCommandGroup(new IndexerCMD(indexer, -0.5, -0.5), new IntakeCMD(intake, true)));
 
-
-
+        NamedCommands.registerCommand("Indexer into launcher", new IndexerCMD(indexer, 0.5, 0.5));
+        NamedCommands.registerCommand("Intake into hopper", new IntakeCMD(intake, false));
+        NamedCommands.registerCommand("Shoot", new LauncherCMD(launcher, 0.7));
+        NamedCommands.registerCommand("Bring intake up", new IntakeArmCMD(intake, true));
+        NamedCommands.registerCommand("Bring intake down", new IntakeArmCMD(intake, false));
+        NamedCommands.registerCommand("Unload", new ParallelCommandGroup(new IndexerCMD(indexer, -0.5, -0.5), new IntakeCMD(intake, true)));
         
 
         drivetrain.registerTelemetry(logger::telemeterize);
