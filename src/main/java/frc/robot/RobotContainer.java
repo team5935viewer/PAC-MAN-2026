@@ -15,12 +15,20 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-
+import frc.robot.Commands.IndexerCMD;
+import frc.robot.Commands.IntakeArmCMD;
+import frc.robot.Commands.IntakeCMD;
+import frc.robot.Commands.LauncherCMD;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Launcher;
 
 public class RobotContainer {
 
@@ -30,6 +38,13 @@ public class RobotContainer {
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
     private final double TurtleModifier = .3;
 
+     /* Declare subsystems. */
+    private final Telemetry logger = new Telemetry(MaxSpeed);
+    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    private final Indexer indexer = new Indexer();
+    private final Intake intake = new Intake();
+    private final Launcher launcher = new Launcher();
+
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
             .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
@@ -37,13 +52,10 @@ public class RobotContainer {
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
-    private final Telemetry logger = new Telemetry(MaxSpeed);
-
+    /* Declare human interface devices. */
     private final CommandXboxController joystick = new CommandXboxController(0);
-
     private final GenericHID operatorPanel = new GenericHID(1);
 
-    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     public RobotContainer() {
         autoChooser = AutoBuilder.buildAutoChooser();
@@ -92,6 +104,21 @@ public class RobotContainer {
 
         // Reset the field-centric heading on left bumper press.
         joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+
+        // Indexer into launcher.
+        new JoystickButton(operatorPanel, 0).whileTrue(new IndexerCMD(indexer, 0.5, 0.5));
+        // Intake into hopper.
+        new JoystickButton(operatorPanel, 0).whileTrue(new IntakeCMD(intake, false));
+        // Shoot.
+        new JoystickButton(operatorPanel, 0).whileTrue(new LauncherCMD(launcher, 0.7));
+        // Bring intake up.
+        new JoystickButton(operatorPanel, 0).onTrue(new IntakeArmCMD(intake, true));
+        // Bring intake down.
+        new JoystickButton(operatorPanel, 0).onTrue(new IntakeArmCMD(intake, false));
+        // Unload.
+        new JoystickButton(operatorPanel, 0).whileTrue(new ParallelCommandGroup(new IndexerCMD(indexer, -0.5, -0.5), new IntakeCMD(intake, true)));
+
+
 
         
 

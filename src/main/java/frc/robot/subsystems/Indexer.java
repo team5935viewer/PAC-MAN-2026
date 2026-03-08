@@ -32,6 +32,12 @@ public class Indexer extends SubsystemBase {
     rightDrive.set(percentOutput);
   }
 
+  public void stop() {
+    hopperDrive.stopMotor();
+    leftDrive.stopMotor();
+    rightDrive.stopMotor();
+  }
+
 
 
   @Override

@@ -5,42 +5,42 @@
 package frc.robot.Commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Indexer;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class IntakeCMD extends Command {
+public class IndexerCMD extends Command {
 
-  private Intake intake;
-  private double intakeSpeed = 0.5; // Speed of intake wheels in percent output (0.0-1.0). 
-  private boolean reversed;
+  private Indexer indexer;
 
-  /** Creates a new IntakeCMD. */
-  public IntakeCMD(Intake intake, boolean reversed) {
+  private double driveHopper; // These values are configured when the command is 
+  private double driveLR;     // constructed. Values are between -1.0 to 1.0
+
+  /** Creates a new IndexerCMD. */
+  public IndexerCMD(Indexer indexer, double driveHopper, double driveLR) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.intake = intake;
-    this.reversed = reversed;
-    addRequirements(intake);
+    addRequirements(indexer);
+    this.indexer = indexer;
+    this.driveHopper = driveHopper;
+    this.driveLR = driveLR;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    this.intake.setIntakeDOWN();
-    if (reversed) {
-      intakeSpeed = (intakeSpeed * -1);
-    }
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    this.intake.driveIntake(intakeSpeed);
+    indexer.driveHopper(driveHopper);
+    indexer.driveLR(driveLR);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    this.intake.stop();
+    indexer.stop();
   }
 
   // Returns true when the command should end.

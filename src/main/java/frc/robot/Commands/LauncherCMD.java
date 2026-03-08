@@ -5,42 +5,39 @@
 package frc.robot.Commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Launcher;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class IntakeCMD extends Command {
+public class LauncherCMD extends Command {
 
-  private Intake intake;
-  private double intakeSpeed = 0.5; // Speed of intake wheels in percent output (0.0-1.0). 
-  private boolean reversed;
+  private Launcher launcher;
+  
+  private double percentOutput;
 
-  /** Creates a new IntakeCMD. */
-  public IntakeCMD(Intake intake, boolean reversed) {
+  /** Creates a new LauncherCMD. */
+  public LauncherCMD(Launcher launcher, double percentOutput) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.intake = intake;
-    this.reversed = reversed;
-    addRequirements(intake);
+    this.launcher = launcher;
+    this.percentOutput = percentOutput;
+    addRequirements(launcher);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    this.intake.setIntakeDOWN();
-    if (reversed) {
-      intakeSpeed = (intakeSpeed * -1);
-    }
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    this.intake.driveIntake(intakeSpeed);
+    launcher.driveLauncher(percentOutput);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    this.intake.stop();
+    launcher.stop();
   }
 
   // Returns true when the command should end.

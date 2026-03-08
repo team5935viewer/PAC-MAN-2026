@@ -8,39 +8,53 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class IntakeCMD extends Command {
+public class IntakeArmCMD extends Command {
 
   private Intake intake;
-  private double intakeSpeed = 0.5; // Speed of intake wheels in percent output (0.0-1.0). 
-  private boolean reversed;
+  private double setpoint;
+  private boolean booleanMode;
+  private boolean goUp;
 
-  /** Creates a new IntakeCMD. */
-  public IntakeCMD(Intake intake, boolean reversed) {
+  /** Creates a new IntakeArmCMD. */
+  public IntakeArmCMD(Intake intake, double setpoint) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.intake = intake;
-    this.reversed = reversed;
     addRequirements(intake);
+    this.intake = intake;
+    this.setpoint = setpoint;
+    this.booleanMode = false;
+  }
+
+  public IntakeArmCMD(Intake intake, boolean goUp) {
+    addRequirements(intake);
+    this.intake = intake;
+    this.booleanMode = true;
+    this.goUp = goUp;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    this.intake.setIntakeDOWN();
-    if (reversed) {
-      intakeSpeed = (intakeSpeed * -1);
-    }
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    this.intake.driveIntake(intakeSpeed);
+    if (booleanMode) {
+      if (goUp) {
+        this.intake.setIntakeUP();
+      } else {
+        this.intake.setIntakeDOWN();
+      }
+    } else {
+      this.intake.setIntakeArm(setpoint);
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    this.intake.stop();
+
   }
 
   // Returns true when the command should end.

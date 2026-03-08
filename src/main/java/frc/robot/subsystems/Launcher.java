@@ -24,6 +24,15 @@ public class Launcher extends SubsystemBase {
     rightDrive.set(percentOutput);
   }
 
+  public double getSpeed() {
+    return leftDrive.getEncoder().getVelocity();
+  }
+
+  public void stop() {
+    leftDrive.stopMotor();
+    rightDrive.stopMotor();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
