@@ -16,9 +16,9 @@ public class Indexer extends SubsystemBase {
 
   /** Creates a new Indexer. */
   public Indexer() {
-    this.hopperDrive = new SparkMax(0, MotorType.kBrushless);
-    this.leftDrive = new SparkMax(0, MotorType.kBrushless);
-    this.rightDrive = new SparkMax(0, MotorType.kBrushless);
+    this.hopperDrive = new SparkMax(18, MotorType.kBrushless);
+    this.leftDrive = new SparkMax(14, MotorType.kBrushless);
+    this.rightDrive = new SparkMax(19, MotorType.kBrushless);
 
 
   }

@@ -15,8 +15,8 @@ public class Launcher extends SubsystemBase {
 
   /** Creates a new Launcher. */
   public Launcher() {
-    leftDrive = new SparkMax(0, MotorType.kBrushless);
-    rightDrive = new SparkMax(0, MotorType.kBrushless);
+    leftDrive = new SparkMax(15, MotorType.kBrushless);
+    rightDrive = new SparkMax(16, MotorType.kBrushless);
   }
 
   public void driveLauncher(double percentOutput) {
