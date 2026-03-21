@@ -20,7 +20,7 @@ public class Intake extends SubsystemBase {
   SparkClosedLoopController intakeArmPID = intakeArm.getClosedLoopController();
   private SparkMax intakeWheels;
 
-  private final double downPos = 5.0; // 0 = full up then this value is full down.
+  private final double downPos = -32.0; // 0 = full up then this value is full down.
 
   /** Creates a new Intake. */
   public Intake() {
@@ -30,7 +30,7 @@ public class Intake extends SubsystemBase {
     SparkMaxConfig intakeArmConfig = new SparkMaxConfig();
 
     intakeArmConfig.closedLoop
-      .p(0.0)
+      .p(0.02)
       .i(0.0)
       .d(0.0)
       .outputRange(0.0, 0.0);
