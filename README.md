@@ -9,7 +9,8 @@ The following is a list of critical documentations and websites which shows futu
 
   https://www.reca.lc/
 
-  https://www.chiefdelphi.com/
+  https://www.chiefdelphi.com/<img width="800" height="800" alt="PAC-MAN Logo" src="https://github.com/user-attachments/assets/11d46b6c-aaef-4c99-a43f-d9ca7fe7519c" />
+
 
   https://docs.wpilib.org/en/2021/index.html
 
