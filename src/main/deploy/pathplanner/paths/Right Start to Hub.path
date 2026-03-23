@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.782811387900357,
-        "y": 3.97582443653618
+        "x": 3.482158956109135,
+        "y": 0.4898457888493476
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.782811387900357,
-        "y": 3.97582443653618
+        "x": 3.3100118623962045,
+        "y": 1.2214709371292998
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.5789916963226576,
-        "y": 3.97582443653618
+        "x": 3.535954922894425,
+        "y": 4.018861209964412
       },
       "prevControl": {
-        "x": 2.5789916963226576,
-        "y": 3.97582443653618
+        "x": 2.8366073546807566,
+        "y": 3.9220284697586667
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Hub Center Launch Pos"
     }
   ],
   "rotationTargets": [],
