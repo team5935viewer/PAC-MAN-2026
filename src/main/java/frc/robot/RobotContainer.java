@@ -125,17 +125,17 @@ public class RobotContainer {
         joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         // Indexer into launcher.
-        new JoystickButton(operatorPanel, 0).whileTrue(new IndexerCMD(indexer, 0.5, 0.5));
+        new JoystickButton(operatorPanel, 18).whileTrue(new IndexerCMD(indexer, 0.5, 0.5));
         // Intake into hopper.
-        new JoystickButton(operatorPanel, 0).whileTrue(new IntakeCMD(intake, false));
+        new JoystickButton(operatorPanel, 17).whileTrue(new IntakeCMD(intake, false));
         // Shoot.
-        new JoystickButton(operatorPanel, 0).whileTrue(new LauncherCMD(launcher, 0.7));
+        new JoystickButton(operatorPanel, 21).whileTrue(new LauncherCMD(launcher, 0.7));
         // Bring intake up.
-        new JoystickButton(operatorPanel, 0).onTrue(new IntakeArmCMD(intake, true));
+        new JoystickButton(operatorPanel, 19).onTrue(new IntakeArmCMD(intake, true));
         // Bring intake down.
-        new JoystickButton(operatorPanel, 0).onTrue(new IntakeArmCMD(intake, false));
+        new JoystickButton(operatorPanel, 20).onTrue(new IntakeArmCMD(intake, false));
         // Unload.
-        new JoystickButton(operatorPanel, 0).whileTrue(new ParallelCommandGroup(new IndexerCMD(indexer, -0.5, -0.5), new IntakeCMD(intake, true)));
+        new JoystickButton(operatorPanel, 16).whileTrue(new ParallelCommandGroup(new IndexerCMD(indexer, -0.5, -0.5), new IntakeCMD(intake, true)));
 
         // PLAN B - Annihilate the youth.
         try{
@@ -152,7 +152,7 @@ public class RobotContainer {
             Units.degreesToRadians(540), Units.degreesToRadians(720));
 
         // Since AutoBuilder is configured, we can use it to build pathfinding commands
-        new JoystickButton(operatorPanel, 0).whileTrue(AutoBuilder.pathfindThenFollowPath(
+        joystick.rightTrigger().whileTrue(AutoBuilder.pathfindThenFollowPath(
             LauncherEnvelope,
             constraints));
 
