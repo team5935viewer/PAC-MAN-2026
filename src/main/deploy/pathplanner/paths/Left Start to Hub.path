@@ -12,7 +12,7 @@
         "y": 7.031435349940688
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Start Left"
     },
     {
       "anchor": {
@@ -48,7 +48,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -179.37724431279366
   },
   "useDefaultConstraints": true
 }
