@@ -20,7 +20,7 @@ public class Launcher extends SubsystemBase {
   }
 
   public void driveLauncher(double percentOutput) {
-    leftDrive.set(percentOutput);
+    leftDrive.set(-percentOutput);
     rightDrive.set(percentOutput);
   }
 

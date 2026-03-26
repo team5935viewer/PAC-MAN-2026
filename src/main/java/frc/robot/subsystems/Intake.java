@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Intake extends SubsystemBase {
 
   private SparkMax intakeArm;
-  SparkClosedLoopController intakeArmPID = intakeArm.getClosedLoopController();
+  SparkClosedLoopController intakeArmPID;
   private SparkMax intakeWheels;
 
   private final double downPos = -32.0; // 0 = full up then this value is full down.
@@ -25,6 +25,7 @@ public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
   public Intake() {
     intakeArm = new SparkMax(17, MotorType.kBrushless);
+    intakeArmPID = intakeArm.getClosedLoopController();
     intakeWheels = new SparkMax(20, MotorType.kBrushless);
 
     SparkMaxConfig intakeArmConfig = new SparkMaxConfig();

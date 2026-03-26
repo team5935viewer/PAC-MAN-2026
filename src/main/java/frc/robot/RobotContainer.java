@@ -129,7 +129,7 @@ public class RobotContainer {
         // Intake into hopper.
         new JoystickButton(operatorPanel, 17).whileTrue(new IntakeCMD(intake, false));
         // Shoot.
-        new JoystickButton(operatorPanel, 21).whileTrue(new LauncherCMD(launcher, 0.7));
+        new JoystickButton(operatorPanel, 21).whileTrue(new LauncherCMD(launcher, 1));
         // Bring intake up.
         new JoystickButton(operatorPanel, 19).onTrue(new IntakeArmCMD(intake, true));
         // Bring intake down.
