@@ -34,7 +34,7 @@ public class Intake extends SubsystemBase {
       .p(0.02)
       .i(0.0)
       .d(0.0)
-      .outputRange(0.0, 0.0);
+      .outputRange(-1.0, 1.0);
 
     intakeArm.configure(intakeArmConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   
